@@ -1,3 +1,5 @@
+import os
+import json
 import streamlit as st
 from PIL import Image
 import pandas as pd
@@ -20,12 +22,12 @@ st.text('Pythonに関する情報をYouTube上で発信しているPython VTuber
 # Google Calendar API用のスコープ
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 
-# サービスアカウントキーのJSONファイルのパス
-SERVICE_ACCOUNT_FILE = './yoyaku-wgs-1e8f30336c21.json'
+# 環境変数からサービスアカウントキーのJSON内容を取得
+credentials_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+credentials_info = json.loads(credentials_json) if credentials_json else None
 
 # サービスアカウントの資格情報を設定
-credentials = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+credentials = service_account.Credentials.from_service_account_info(credentials_info, scopes=SCOPES)
 
 # Google Calendar APIクライアントの作成
 service = build('calendar', 'v3', credentials=credentials)
