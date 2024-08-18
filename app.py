@@ -1,8 +1,8 @@
 import os
 import json
 import streamlit as st
-from PIL import Image
-import pandas as pd
+# from PIL import Image
+# import pandas as pd
 from datetime import datetime, timezone, timedelta
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
