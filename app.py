@@ -20,14 +20,28 @@ st.text('Pythonに関する情報をYouTube上で発信しているPython VTuber
 # Google Calendar API用のスコープ
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 
-# StreamlitのSecretsからサービスアカウントキーのJSON内容を取得
-credentials_json = st.secrets["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+# 環境を切り替えるフラグ (True: ローカル, False: デプロイ)
+USE_LOCAL = False  # ローカル環境で使用する場合はTrueに、デプロイ環境ではFalseに設定
+
+if USE_LOCAL:
+    # ローカル用のサービスアカウントキーのファイルを指定
+    SERVICE_ACCOUNT_FILE = 'yoyaku-wgs-1e8f30336c21.json'
+
+    try:
+        credentials = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    except Exception as e:
+        st.error(f"ローカル環境でのエラー: {str(e)}")
+else:
+    try:
+        # デプロイ環境用のSecretsからサービスアカウントキーを取得
+        credentials_json = st.secrets["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+        credentials = service_account.Credentials.from_service_account_info(
+            credentials_json, scopes=SCOPES)
+    except Exception as e:
+        st.error(f"デプロイ環境でのエラー: {str(e)}")
 
 try:
-    # 環境変数からサービスアカウントの資格情報を設定
-    credentials = service_account.Credentials.from_service_account_info(
-        credentials_json, scopes=SCOPES)
-
     # Google Calendar APIクライアントの作成
     service = build('calendar', 'v3', credentials=credentials)
 
