@@ -1,0 +1,19 @@
+# Python関連のファイルを無視
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+env/
+venv/
+.venv/
+.env/
+.eggs/
+*.egg-info/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# サービスアカウントのJSONファイルを無視
+yoyaku-wgs-1e8f30336c21.json
+
+# IDE関連ファイルを無視 (VS Code)
+.vscode/
