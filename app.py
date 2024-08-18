@@ -24,6 +24,14 @@ SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 
 # 環境変数からサービスアカウントキーのJSON内容を取得
 credentials_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+
+if credentials_json is None:
+    st.error("GOOGLE_APPLICATION_CREDENTIALS_JSON 環境変数が設定されていません。")
+else:
+    credentials_info = json.loads(credentials_json)
+    credentials = service_account.Credentials.from_service_account_info(credentials_info, scopes=SCOPES)
+
+
 credentials_info = json.loads(credentials_json) if credentials_json else None
 
 # サービスアカウントの資格情報を設定
