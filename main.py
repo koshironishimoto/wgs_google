@@ -1,6 +1,5 @@
 import streamlit as st
 import sqlite3
-import pandas as pd
 
 # SQLiteデータベースに接続（なければ自動で作成）
 conn = sqlite3.connect('wgs.db', check_same_thread=False)
@@ -29,11 +28,6 @@ def authenticate_user(identifier, password):
         c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (identifier, password))
     
     return c.fetchone()
-
-# データベースからすべてのユーザーを取得してDataFrameに変換
-def fetch_data():
-    df = pd.read_sql("SELECT * FROM users", conn)
-    return df
 
 # サインアップ機能
 def signup():
@@ -65,9 +59,7 @@ def signup():
             else:
                 add_user(last_name, first_name, email, username, password)
                 st.success('サインアップが完了しました！')
-
-                # df = fetch_data()
-                # st.dataframe(df)  # データフレームを表示
+                st.session_state['page'] = 'yoyaku'  # サインアップ後に予約ページにリダイレクト
 
         else:
             st.error('すべてのフィールドを正しく入力してください。')
@@ -87,7 +79,7 @@ def login():
                 'first_name': user[1]
             }
             st.success(f"ログインに成功しました！\nようこそ、{user[1]} {user[0]} さん")
-            st.session_state['page'] = 'yoyaku'
+            st.session_state['page'] = 'yoyaku'  # ログイン後に予約ページにリダイレクト
         else:
             st.error('ユーザー名またはパスワードが間違っています。')
 
@@ -106,7 +98,8 @@ def main():
             login()
 
     elif st.session_state['page'] == 'yoyaku':
-        import yoyaku  # yoyaku.pyをインポートして表示
+        st.write("予約ページに移動します...")
+        import pages.yoyaku  # yoyaku.pyをインポートして表示
 
 if __name__ == '__main__':
     main()
