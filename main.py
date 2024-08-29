@@ -78,10 +78,15 @@ def login():
                 'last_name': user[0],
                 'first_name': user[1]
             }
-            st.success(f"ログインに成功しました！\nようこそ、{user[1]} {user[0]} さん")
-            st.session_state['page'] = 'yoyaku'  # ログイン後に予約ページにリダイレクト
+            st.success(f"ようこそ、{user[1]}{user[0]}さん。ログインに成功しました！\n左上の 'yoyaku' から予約を行ってください。")
+
         else:
             st.error('ユーザー名またはパスワードが間違っています。')
+
+# 予約ページ機能
+def yoyaku_page():
+    st.header('予約ページ')
+    st.write("ここで予約の操作を行います。")
 
 # メインアプリケーションの部分
 def main():
@@ -89,17 +94,18 @@ def main():
         st.session_state['page'] = 'login'
 
     if st.session_state['page'] == 'login':
-        st.sidebar.title('メニュー')
-        option = st.sidebar.selectbox('選択してください', ['サインアップ', 'ログイン'])
-
-        if option == 'サインアップ':
-            signup()
-        elif option == 'ログイン':
-            login()
-
+        login()
+    elif st.session_state['page'] == 'signup':
+        signup()
     elif st.session_state['page'] == 'yoyaku':
-        st.write("予約ページに移動します...")
-        import pages.yoyaku  # yoyaku.pyをインポートして表示
+        yoyaku_page()  # 予約ページの内容を表示
+
+    # # サイドバーでページを選択できるようにする
+    # st.sidebar.title('メニュー')
+    # if st.sidebar.button('サインアップページに移動'):
+    #     st.session_state['page'] = 'signup'
+    # if st.sidebar.button('ログインページに移動'):
+    #     st.session_state['page'] = 'login'
 
 if __name__ == '__main__':
     main()
