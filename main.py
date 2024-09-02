@@ -91,8 +91,26 @@ def yoyaku_page():
 # メインアプリケーションの部分
 def main():
     if 'page' not in st.session_state:
-        st.session_state['page'] = 'login'
+        st.session_state['page'] = 'login'  # デフォルトはログインページ
 
+    # サイドバーでメニューを追加
+    st.sidebar.title("メニュー")
+    st.write(f"Current page: {st.session_state['page']}")
+
+    # テスト用：予約ページに直接移動するためのオプションをコメントアウト
+    # if st.sidebar.checkbox('テストモード（予約ページ）', value=False):
+    #     st.session_state['page'] = 'yoyaku'
+    # else:
+    # サイドバーから選択したページに移動
+    page_selection = st.sidebar.radio('ページを選択してください', ('ログイン', 'サインアップ', '予約ページ'))
+    if page_selection == 'ログイン':
+        st.session_state['page'] = 'login'
+    elif page_selection == 'サインアップ':
+        st.session_state['page'] = 'signup'
+    elif page_selection == '予約ページ':
+        st.session_state['page'] = 'yoyaku'
+
+    # 現在のページに基づいて機能を表示
     if st.session_state['page'] == 'login':
         login()
     elif st.session_state['page'] == 'signup':
@@ -100,15 +118,13 @@ def main():
     elif st.session_state['page'] == 'yoyaku':
         yoyaku_page()  # 予約ページの内容を表示
 
-    # # サイドバーでページを選択できるようにする
-    # st.sidebar.title('メニュー')
-    # if st.sidebar.button('サインアップページに移動'):
-    #     st.session_state['page'] = 'signup'
-    # if st.sidebar.button('ログインページに移動'):
-    #     st.session_state['page'] = 'login'
+    st.write(st.session_state)
+
+
 
 if __name__ == '__main__':
     main()
+
 
 # データベース接続を閉じる
 conn.close()
